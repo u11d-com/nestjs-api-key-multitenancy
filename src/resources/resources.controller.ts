@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { TenantKeyAuth } from 'src/auth/tenant-key-auth.decorator';
+import { TenantIdParam } from 'src/common/tenant-id.param';
 import { ResourcesService } from './resources.service';
 import { CreateResourceDto } from './create-resource.dto';
-import { TenantIdParam } from '../tenant-id.param';
 import { Resource } from './resource.entity';
 
 @TenantKeyAuth()

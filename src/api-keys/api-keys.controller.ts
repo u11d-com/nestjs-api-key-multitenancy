@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Patch, Body, Param } from '@nestjs/common';
+import { TenantIdParam } from 'src/common/tenant-id.param';
+import { MasterKeyAuth } from 'src/auth/master-key-auth.decorator';
 import { ApiKeysService } from './api-keys.service';
 import { CreateApiKeyDto } from './create-api-key.dto';
 import { UpdateApiKeyDto } from './update-api-key.dto';
-import { TenantIdParam } from 'src/tenant-id.param';
-import { MasterKeyAuth } from 'src/auth/master-key-auth.decorator';
 import { ApiKeyModel } from './api-key.model';
 import { ApiKeyWithRawValueModel } from './api-key-with-raw-value.model';
 

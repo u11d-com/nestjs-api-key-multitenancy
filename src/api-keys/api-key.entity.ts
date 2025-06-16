@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Tenant } from '../tenants/tenant.entity';
-import { BaseEntity } from 'src/base.entity';
+import { BaseEntity } from 'src/common/base.entity';
+import { Tenant } from 'src/tenants/tenant.entity';
 
 @Entity()
 export class ApiKey extends BaseEntity {

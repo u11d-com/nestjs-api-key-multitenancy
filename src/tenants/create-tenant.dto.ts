@@ -1,3 +1,3 @@
-import { NameDto } from 'src/name.dto';
+import { NameDto } from 'src/common/name.dto';
 
 export class CreateTenantDto extends NameDto {}

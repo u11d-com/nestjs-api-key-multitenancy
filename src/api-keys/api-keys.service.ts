@@ -52,7 +52,7 @@ export class ApiKeysService {
     tenantId: number,
     dto: CreateApiKeyDto,
   ): Promise<{ apiKey: ApiKey; rawValue: string }> {
-    const tenant = await this.tenantsService.findOne(tenantId);
+    const tenant = await this.tenantsService.checkExists(tenantId);
 
     const rawValue = this.generateApiKeyValue();
     const hash = this.hashApiKey(rawValue);
@@ -82,6 +82,8 @@ export class ApiKeysService {
   }
 
   async findAllByTenant(tenantId: TenantId): Promise<ApiKey[]> {
+    await this.tenantsService.checkExists(tenantId);
+
     return this.apiKeysRepository.find({
       where: { tenant: { id: tenantId } },
     });

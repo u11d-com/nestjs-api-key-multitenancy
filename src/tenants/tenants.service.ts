@@ -20,7 +20,7 @@ export class TenantsService {
     return this.tenantsRepository.find();
   }
 
-  async checkExists(id: number): Promise<Tenant> {
+  async checkExists(id: string): Promise<Tenant> {
     const tenant = await this.findOne(id);
     if (!tenant) {
       throw new NotFoundException(`Tenant with ID ${id} not found`);
@@ -28,7 +28,7 @@ export class TenantsService {
     return tenant;
   }
 
-  async findOne(id: number): Promise<Tenant | null> {
+  async findOne(id: string): Promise<Tenant | null> {
     const tenant = await this.tenantsRepository.findOneBy({ id });
     return tenant;
   }

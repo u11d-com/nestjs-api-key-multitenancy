@@ -7,8 +7,6 @@ import { TenantsService } from 'src/tenants/tenants.service';
 import { ApiKey } from './api-key.entity';
 import { CreateApiKeyDto } from './create-api-key.dto';
 
-type TenantId = number;
-
 @Injectable()
 export class ApiKeysService {
   private readonly saltKey = process.env.SALT_KEY || 'secret_salt_key';
@@ -49,7 +47,7 @@ export class ApiKeysService {
   }
 
   async create(
-    tenantId: number,
+    tenantId: string,
     dto: CreateApiKeyDto,
   ): Promise<{ apiKey: ApiKey; rawValue: string }> {
     const tenant = await this.tenantsService.checkExists(tenantId);
@@ -81,7 +79,7 @@ export class ApiKeysService {
     };
   }
 
-  async findAllByTenant(tenantId: TenantId): Promise<ApiKey[]> {
+  async findAllByTenant(tenantId: string): Promise<ApiKey[]> {
     await this.tenantsService.checkExists(tenantId);
 
     return this.apiKeysRepository.find({
@@ -89,11 +87,11 @@ export class ApiKeysService {
     });
   }
 
-  async getTenantIdByKeyValue(apiKeyValue: string): Promise<TenantId | null> {
+  async getTenantIdByKeyValue(apiKeyValue: string): Promise<string | null> {
     const hashedKey = this.hashApiKey(apiKeyValue);
-    const apiKeyTenantId = await this.cacheManager.get<TenantId>(hashedKey);
+    const apiKeyTenantId = await this.cacheManager.get(hashedKey);
 
-    if (typeof apiKeyTenantId !== 'number') {
+    if (typeof apiKeyTenantId !== 'string') {
       return null;
     }
 

@@ -11,7 +11,7 @@ export class ApiKeysController {
 
   @Post()
   async create(
-    @TenantIdParam() tenantId: number,
+    @TenantIdParam() tenantId: string,
     @Body() createApiKeyDto: CreateApiKeyDto,
   ): Promise<ApiKeyWithRawValueModel> {
     const result = await this.apiKeysService.create(tenantId, createApiKeyDto);
@@ -27,7 +27,7 @@ export class ApiKeysController {
   }
 
   @Get()
-  async findAll(@TenantIdParam() tenantId: number): Promise<ApiKeyModel[]> {
+  async findAll(@TenantIdParam() tenantId: string): Promise<ApiKeyModel[]> {
     const apiKeys = await this.apiKeysService.findAllByTenant(tenantId);
 
     // Exclude the hash from the response, as it should not be exposed to the user.

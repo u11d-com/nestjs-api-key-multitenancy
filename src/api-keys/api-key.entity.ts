@@ -1,20 +1,9 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Tenant } from '../tenants/tenant.entity';
+import { BaseEntity } from 'src/base.entity';
 
 @Entity()
-export class ApiKey {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  name: string;
-
+export class ApiKey extends BaseEntity {
   @Column()
   valueLast4: string;
 

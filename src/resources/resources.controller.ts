@@ -10,14 +10,14 @@ export class ResourcesController {
 
   @Post()
   async create(
-    @TenantIdParam() tenantId: number,
+    @TenantIdParam() tenantId: string,
     @Body() createResourceDto: CreateResourceDto,
   ): Promise<Resource> {
     return this.resourcesService.create(tenantId, createResourceDto);
   }
 
   @Get()
-  async findAll(@TenantIdParam() tenantId: number): Promise<Resource[]> {
+  async findAll(@TenantIdParam() tenantId: string): Promise<Resource[]> {
     return this.resourcesService.findAllByTenant(tenantId);
   }
 }

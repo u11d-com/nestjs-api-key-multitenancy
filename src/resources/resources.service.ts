@@ -13,7 +13,7 @@ export class ResourcesService {
     private readonly tenantsService: TenantsService,
   ) {}
 
-  async create(tenantId: number, dto: CreateResourceDto): Promise<Resource> {
+  async create(tenantId: string, dto: CreateResourceDto): Promise<Resource> {
     const tenant = await this.tenantsService.checkExists(tenantId);
 
     const resource = this.resourcesRepository.create({
@@ -24,7 +24,7 @@ export class ResourcesService {
     return this.resourcesRepository.save(resource);
   }
 
-  async findAllByTenant(tenantId: number): Promise<Resource[]> {
+  async findAllByTenant(tenantId: string): Promise<Resource[]> {
     await this.tenantsService.checkExists(tenantId);
 
     return this.resourcesRepository.find({

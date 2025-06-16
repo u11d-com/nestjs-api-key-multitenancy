@@ -1,3 +1,3 @@
-export class CreateTenantDto {
-  name: string;
-}
+import { NameDto } from 'src/name.dto';
+
+export class CreateTenantDto extends NameDto {}

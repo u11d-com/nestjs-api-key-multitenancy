@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Tenant } from './tenant.entity';
@@ -8,7 +8,7 @@ import { CreateTenantDto } from './create-tenant.dto';
 export class TenantsService {
   constructor(
     @InjectRepository(Tenant)
-    private tenantsRepository: Repository<Tenant>,
+    private readonly tenantsRepository: Repository<Tenant>,
   ) {}
 
   async create(dto: CreateTenantDto): Promise<Tenant> {
@@ -18,5 +18,13 @@ export class TenantsService {
 
   async findAll(): Promise<Tenant[]> {
     return this.tenantsRepository.find();
+  }
+
+  async findOne(id: number): Promise<Tenant> {
+    const tenant = await this.tenantsRepository.findOneBy({ id });
+    if (!tenant) {
+      throw new NotFoundException(`Tenant with ID ${id} not found`);
+    }
+    return tenant;
   }
 }

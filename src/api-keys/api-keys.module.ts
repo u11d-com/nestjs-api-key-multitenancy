@@ -19,5 +19,6 @@ import { createKeyv } from '@keyv/redis';
   ],
   controllers: [ApiKeysController],
   providers: [ApiKeysService],
+  exports: [ApiKeysService],
 })
 export class ApiKeysModule {}

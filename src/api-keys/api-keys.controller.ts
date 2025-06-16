@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Param } from '@nestjs/common';
 import { ApiKeysService } from './api-keys.service';
 import { CreateApiKeyDto } from './create-api-key.dto';
+import { UpdateApiKeyDto } from './update-api-key.dto';
 import { TenantIdParam } from 'src/tenant-id.param';
 import { ApiKeyModel } from './api-key.model';
 import { ApiKeyWithRawValueModel } from './api-key-with-raw-value.model';
@@ -33,5 +34,22 @@ export class ApiKeysController {
     // Exclude the hash from the response, as it should not be exposed to the user.
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return apiKeys.map(({ hash, ...apiKey }) => apiKey);
+  }
+
+  @Patch(':apiKeyId')
+  async updateStatus(
+    @TenantIdParam() tenantId: string,
+    @Param('apiKeyId') apiKeyId: string,
+    @Body() dto: UpdateApiKeyDto,
+  ): Promise<ApiKeyModel> {
+    const apiKey = await this.apiKeysService.updateStatus(
+      tenantId,
+      apiKeyId,
+      dto.active,
+    );
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { hash, ...result } = apiKey;
+    return result;
   }
 }

@@ -87,6 +87,37 @@ export class ApiKeysService {
     });
   }
 
+  async updateStatus(
+    tenantId: string,
+    apiKeyId: string,
+    active: boolean,
+  ): Promise<ApiKey> {
+    await this.tenantsService.checkExists(tenantId);
+
+    const apiKey = await this.apiKeysRepository.findOne({
+      where: { id: apiKeyId, tenant: { id: tenantId } },
+    });
+
+    if (!apiKey) {
+      throw new Error(
+        `API key with ID ${apiKeyId} not found for tenant ${tenantId}`,
+      );
+    }
+
+    apiKey.active = active;
+
+    if (!active) {
+      await this.cacheManager.del(apiKey.hash);
+    } else {
+      const ttl = apiKey.expiresAt
+        ? new Date(apiKey.expiresAt).getTime() - new Date().getTime()
+        : 0;
+      await this.cacheManager.set(apiKey.hash, tenantId, ttl);
+    }
+
+    return this.apiKeysRepository.save(apiKey);
+  }
+
   async getTenantIdByKeyValue(apiKeyValue: string): Promise<string | null> {
     const hashedKey = this.hashApiKey(apiKeyValue);
     const apiKeyTenantId = await this.cacheManager.get(hashedKey);

@@ -6,6 +6,7 @@ import { ResourcesModule } from './resources/resources.module';
 import { typeOrmConfig } from './typeorm-config';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
         },
       ],
     }),
+    HealthModule,
   ],
 })
 export class AppModule {}

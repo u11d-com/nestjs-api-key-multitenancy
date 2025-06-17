@@ -5,11 +5,9 @@ import { Resource } from './resources/resource.entity';
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
-  host: process.env.POSTGRES_HOST || 'localhost',
-  port: Number(process.env.POSTGRES_PORT || '') || 5432,
-  username: process.env.POSTGRES_USERNAME || 'postgres',
-  password: process.env.POSTGRES_PASSWORD || 'postgres',
-  database: 'api_key_multitenancy_demo',
+  url:
+    process.env.POSTGRES_URL ||
+    'postgresql://postgres:postgres@localhost:5432/api_key_multitenancy_demo',
   entities: [Tenant, ApiKey, Resource],
   synchronize: true, // !!! WARNING: Set to false before go to production
 };

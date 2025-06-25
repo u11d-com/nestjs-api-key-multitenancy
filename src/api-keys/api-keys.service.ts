@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { createHash, pbkdf2Sync, randomBytes } from 'crypto';
@@ -8,7 +8,7 @@ import { ApiKey } from './api-key.entity';
 import { CreateApiKeyDto } from './create-api-key.dto';
 
 @Injectable()
-export class ApiKeysService {
+export class ApiKeysService implements OnModuleInit {
   private readonly logger = new Logger(ApiKeysService.name);
 
   private readonly saltKey = process.env.SALT_KEY || 'secret_salt_key';
@@ -59,12 +59,13 @@ export class ApiKeysService {
   private async loadActiveApiKeysToCache() {
     const apiKeys = await this.apiKeysRepository.find({
       relations: ['tenant'],
+      where: { active: true },
     });
     for (const apiKey of apiKeys) {
       const ttl = apiKey.expiresAt
         ? apiKey.expiresAt.getTime() - new Date().getTime()
         : 0;
-      if (apiKey.active && ttl >= 0) {
+      if (ttl >= 0) {
         await this.cacheManager.set(apiKey.hash, apiKey.tenant.id, ttl);
         this.logger.debug(
           `Cached API key ${apiKey.id} for tenant ${apiKey.tenant.id}`,
